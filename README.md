@@ -11,13 +11,13 @@ Need help? Email Me: straightfrommgyt@gmail.com
 
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/horionclient/Horion/master/.github/horion-banner.png"/>
+  <img src="https://i9.ytimg.com/vi/Y5qPo5mBxjQ/mqdefault.jpg?v=609fb414&sqp=CNzX04cG&rs=AOn4CLAHvYlrP5Sxcqika2H3dKxz24d-MQ"/>
 </p>
 <br/>
 
-**Horion** is a minecraft bedrock edition utility mod designed to enhance a users gameplay. We do not take responsibility.
-If you want to contribute to this project, feel free to fork this repository and submit a pull request.
-**As of 09/01/20, this project is under no active development by the horion team anymore. We will still review PRs.**
+**Emoji Wars** Emoji Wars is a fun YouTube chat game, Idea by BattleTV and MrRanker, coding by Straight From MG
+**https://youtube.com/straightfrommg**
+**https://mgcounts.com**
 
 [![Discord](https://img.shields.io/discord/732833913705201736?label=chat&logo=discord&logoColor=white&style=for-the-badge)](https://discord.gg/WPe3WeNtgv)
 [![Download the injector](https://img.shields.io/badge/download-injector-brightgreen?style=for-the-badge "Download the injector")](https://horionbeta.club/injector "Download the injector")
