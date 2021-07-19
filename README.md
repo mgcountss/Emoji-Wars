@@ -12,7 +12,7 @@ A Fun YT Chat Game!
 **https://mgcounts.com**
 
 [![Discord](https://img.shields.io/discord/736996801638563921?label=chat&logo=discord&logoColor=white&style=for-the-badge)](https://discord.gg/WPe3WeNtgv)
-[![Github All Releases](https://img.shields.io/github/downloads/mgcountss/Emoji-Wars]()
+[![Github All Releases](https://img.shields.io/github/downloads/mgcountss/Emoji-Wars])
 ![Total Injections](https://img.shields.io/github/downloads/Horionclient/Horion-Releases/total?label=Total%20Injections&style=for-the-badge)
 [![Build Status](https://img.shields.io/azure-devops/build/horionclient/Horion/2?label=dev%20release&style=for-the-badge)](https://dev.azure.com/horionclient/Horion/_build/latest?definitionId=2&branchName=master)
 [![License](https://i.creativecommons.org/l/by-nc/4.0/88x31.png)](https://creativecommons.org/licenses/by-nc/4.0/)
