@@ -1,15 +1,6 @@
 # Emoji-Wars
 A Fun YT Chat Game!
 
-How to play:
-Spam emojis in the yt chat and level up!
-
-Setup: Video Found Here: 
-
-
-Need help? Email Me: straightfrommgyt@gmail.com
-
-
 <p align="center">
   <img src="https://i9.ytimg.com/vi/Y5qPo5mBxjQ/mqdefault.jpg?v=609fb414&sqp=CNzX04cG&rs=AOn4CLAHvYlrP5Sxcqika2H3dKxz24d-MQ"/>
 </p>
@@ -29,11 +20,16 @@ Need help? Email Me: straightfrommgyt@gmail.com
 ## Contributing
 To contribute, simply **fork the repository**, edit the things you want to and **submit a pull request**.
 We will then check your pull request and accept/deny it.
-If you are clueless about what you could start with, [we collected some issues for you](https://github.com/horionclient/Horion/contribute).
-More Information on setting everything up can be found in the **[wiki](https://github.com/horionclient/Horion/wiki "wiki")**!
-If you need any help with understanding our code, join the official discord server
+If you are clueless about what you are doing, don't waste your time trying.
 
-## Licensing
-This work is licensed under the Creative Commons Attribution-NonCommercial 4.0 International License. To view a copy of this license, visit http://creativecommons.org/licenses/by-nc/4.0/ or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
-You are allowed to fork the project and distribute it, if you give credit. You may not sell any code protected by the license.
-Not all source files are protected by this license - Some third party libraries (Chakra, DX11) may be under different copyright.
+## How to play:
+Spam emojis in the yt chat and level up!
+<br>
+## Setup: 
+Video Found Here: {no video yet}
+
+
+## Need help? 
+<br>
+Email Me: straightfrommgyt@gmail.com
+
