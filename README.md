@@ -17,6 +17,7 @@ Need help? Email Me: straightfrommgyt@gmail.com
 
 **Emoji Wars** Emoji Wars is a fun YouTube chat game, Idea by BattleTV and MrRanker, coding by Straight From MG
 **https://youtube.com/straightfrommg**
+<br>
 **https://mgcounts.com**
 
 [![Discord](https://img.shields.io/discord/732833913705201736?label=chat&logo=discord&logoColor=white&style=for-the-badge)](https://discord.gg/WPe3WeNtgv)
