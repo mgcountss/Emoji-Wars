@@ -24,7 +24,7 @@ If you are clueless about what you are doing, don't waste your time trying.
 Spam emojis in the yt chat and level up!
 <br>
 ## Setup: 
-Video Found Here: {no video yet}
+Video Found Here: https://www.youtube.com/watch?v=04IXVy0Fe5k
 
 
 ## Need help? 
