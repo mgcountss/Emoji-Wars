@@ -2,7 +2,7 @@
 A Fun YT Chat Game!
 
 <p align="center">
-  <img src="https://i9.ytimg.com/vi/Y5qPo5mBxjQ/mqdefault.jpg?v=609fb414&sqp=CNzX04cG&rs=AOn4CLAHvYlrP5Sxcqika2H3dKxz24d-MQ"/>
+  <img src="./thumbnail.jpg"/>
 </p>
 <br/>
 
