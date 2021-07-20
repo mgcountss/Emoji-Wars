@@ -11,7 +11,7 @@ A Fun YT Chat Game!
 <br>
 **https://mgcounts.com**
 
-[![Discord](https://img.shields.io/discord/736996801638563921?label=chat&logo=discord&logoColor=white&style=for-the-badge)](https://discord.gg/WPe3WeNtgv)
+[![Discord](https://img.shields.io/discord/736996801638563921?label=chat&logo=discord&logoColor=white&style=for-the-badge)](https://discord.gg/UsEfksU)
 
 ## Contributing
 To contribute, simply **fork the repository**, edit the things you want to and **submit a pull request**.
