@@ -113,20 +113,16 @@ function getFrequency(string) {
           }
       } else {
 
-        fetch('https://api.mgcounts.com/youtube/subscribers/'+cidlol+'')
+        fetch('https://api.mgcounts.com/youtube/user/'+cidlol+'')
     .then(res => res.json())
     .then(json => {
-
       global2.push({   
         "userid": json.id,
         "name": json.title,
         "image": json.image,
         "messages": 0
         })  
-
-
     });   
-
           }
         
       } 
