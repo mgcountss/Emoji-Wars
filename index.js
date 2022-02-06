@@ -73,7 +73,7 @@ app.get('/stats', (req, res) => {
 
 var cidlol = "lol"
 async function getDataFromAPI() {
-  let response = await fetch('https://www.googleapis.com/youtube/v3/liveChat/messages?key=AIzaSyAll51hYqwWb48Y5IGqPV51Ka3M2vykmpg&liveChatId=Cg0KC2RtWnJYVTltRkFVKicKGFVDU2drMWcwQVppOV83NTl5ZnotaUlIZxILZG1aclhVOW1GQVU&part=snippet',{
+  let response = await fetch('https://www.googleapis.com/youtube/v3/liveChat/messages?key= api key &liveChatId= active chat ID &part=snippet',{
 headers: {
 }
   }).then(res => res.json()).then(data => {
@@ -116,6 +116,7 @@ function getFrequency(string) {
         fetch('https://api.mgcounts.com/youtube/user/'+cidlol+'')
     .then(res => res.json())
     .then(json => {
+
       global2.push({   
         "userid": json.id,
         "name": json.title,
@@ -123,6 +124,7 @@ function getFrequency(string) {
         "messages": 0
         })  
     });   
+
           }
         
       } 
