@@ -142,7 +142,7 @@ function load() {
       } else {
         chatID = data.items[0].liveStreamingDetails.activeLiveChatId
         getDataFromAPI()
-        setInterval(fetcher, (fetchTimer * 1000))
+        setInterval(getDataFromAPI, (fetchTimer * 1000))
         console.log("Emoji Wars has started up!")
         open('http://localhost/');
         open('http://localhost/leaderboard');
