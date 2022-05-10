@@ -8,16 +8,20 @@ var todo = require('./data/todo.json');
 let fetch = require("node-fetch")
 const open = require('open');
 let lasttime = 0;
-let chatID = "" //ignore
+let chatID = ""
 app.use(express.static(__dirname + '/public'));
 let names = []
-
-let apikey = "" // api key here
-let videoID = "" // video id here
-let fetchTimer = 5 //how often you fetch in seconds, 10,000 fetches per day
+let config = fs.readFileSync('./config.txt', 'utf8');
+config = config.split("\n")
+let apikey = config[0].split("=")[1].split('/r')[0]
+let videoID = config[1].split("=")[1].split('/r')[0]
+let fetchTimer = config[2].split("=")[1].split('/r')[0]
 
 app.get('/', function (req, res) {
   res.sendFile('/html/index.html', { root: __dirname });
+});
+app.get('/Old-YT.png', function (req, res) {
+  res.sendFile('/images/Old-YT.png', { root: __dirname });
 });
 app.get('/odometer.css', function (req, res) {
   res.sendFile('/css/odometer.css', { root: __dirname });
@@ -83,6 +87,9 @@ async function getDataFromAPI() {
     if (todo.length > 0) {
       update()
     }
+    while (archive.length > 100) {
+      archive.shift()
+    }
   })
 }
 
@@ -94,7 +101,6 @@ function update() {
   if (emojiRegex.test(input) == true) {
     string = getFrequency(input)
   }
-  console.log(string)
   for (var r = 0; r < global.length; r++) {
     for (var rr = 0; rr < string.length; rr++) {
       if (string[rr][0] == global[r].emoji) {
@@ -136,21 +142,23 @@ function load() {
   fetch('https://www.googleapis.com/youtube/v3/videos?part=liveStreamingDetails&id=' + videoID + '&key=' + apikey + '')
     .then(response => response.json())
     .then(data => {
-      if (!data.items[0].liveStreamingDetails) {
-        console.log("Error: Video not live!")
-        process.exit()
+      if (!data.error) {
+        if (!data.items[0].liveStreamingDetails) {
+          console.log("Error: Stream not live!")
+          process.exit()
+        } else {
+          chatID = data.items[0].liveStreamingDetails.activeLiveChatId
+          getDataFromAPI()
+          setInterval(getDataFromAPI, (fetchTimer * 1000))
+          console.log("Emoji Wars has started up!")
+        }
       } else {
-        chatID = data.items[0].liveStreamingDetails.activeLiveChatId
-        getDataFromAPI()
-        setInterval(getDataFromAPI, (fetchTimer * 1000))
-        console.log("Emoji Wars has started up!")
-        open('http://localhost/');
-        open('http://localhost/leaderboard');
+        console.log("Error: Stream not found!")
+        process.exit()
       }
     });
 }
-
-if (apikey !== "" && videoID !== "") {
+if (apikey.length == 40 && videoID.length == 12) {
   load()
 } else {
   console.log("Make sure the API Key and Video ID are NOT blank!")
