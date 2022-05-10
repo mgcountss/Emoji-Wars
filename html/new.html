@@ -4,7 +4,7 @@
 <h1 style="color: #FFFFFF"; id="all" class="odometer"></h1>
 <script>
         async function GetStats() {
-      let request = await fetch('http://localhost/all', { mode: "cors" })
+      let request = await fetch('/all', { mode: "cors" })
       let data = await request.json().catch(() => {})
       if (!data) return;
       all.innerHTML = data
