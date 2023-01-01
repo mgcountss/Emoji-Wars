@@ -24,7 +24,14 @@ If you are clueless about what you are doing, don't waste your time trying.
 Spam emojis in the yt chat and level up!
 <br>
 ## Setup: 
-Video Found Here: https://www.youtube.com/watch?v=04IXVy0Fe5k
+Fill in the blanks in the config.txt file.
+
+apikey=your api key
+videoID=your video id
+fetchTimer=how often you fetch the chat (in seconds)
+
+
+After that, run the start.bat and it should work.
 
 
 ## Need help? 
