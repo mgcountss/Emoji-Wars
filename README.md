@@ -4,9 +4,9 @@ A Fun YT Chat Game!
 <p align="center">
   <img src="./Capture.PNG"/>
 </p>
-<br/>
+<br>
 If you use this give me credit in the description!
-
+<br>
 **Emoji Wars** Emoji Wars is a fun YouTube chat game, Idea by BattleTV and MrRanker, coding by Straight From MG
 **https://youtube.com/straightfrommg**
 <br>
