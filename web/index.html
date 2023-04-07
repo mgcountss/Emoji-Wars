@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Top Emojis</title>
+    <script src="./jquery.js"></script>
+    <script src="./countup.js"></script>
+    <script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:900" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background-repeat: no-repeat;
+            background-color: #000000;
+            margin-top: 1vw;
+        }
+
+        .card {
+            height: 4vw;
+            width: 19vw;
+            text-align: left;
+            background-color: transparent;
+        }
+
+        .name {
+            font-family: 'Roboto';
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-size: 2vw;
+            float: left;
+            margin-top: -0.3vw;
+        }
+
+        .odometer {
+            font-size: 2vw;
+            color: #FFFFFF;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="counters" class="counters"></div>
+</body>
+<script>
+    let first = true;
+    let counts = Array.apply(null, Array(50)).map(Number.prototype.valueOf, 0);
+    const options = {
+        useEasing: false,
+        useGrouping: true,
+        separator: ',',
+        decimal: '.',
+        prefix: '',
+        suffix: ''
+    };
+
+    for (var t = 1; t <= 50; t++) {
+        var htmlcard = `<div class="card" id="card_${t}">
+            <div class="name" id="name_${t}"></div>
+            <div class="odometer" id="count_${t}"></div>
+            </div>`;
+        $('.counters').append(htmlcard);
+    }
+
+    $('.counters').isotope({
+        itemSelector: '.card',
+        layoutMode: 'fitRows',
+        getSortData: {
+            count: '[count] parseInt'
+        },
+        sortBy: 'count',
+        sortAscending: true
+    });
+
+    function update() {
+        $.getJSON("/data", (data) => {
+            data.emojis = data.emojis.sort(function (a, b) { return b.value - a.value });
+            data.emojis = data.emojis.slice(0, 50);
+            let newArray = [];
+            let m = 0;
+            for (var i = 0; i < 5; i++) {
+                for (var j = 0; j < 10; j++) {
+                    data.emojis[m].order = i + j * 5;
+                    m++
+                }
+            }
+            if (first == false) {
+                for (var q = 0; q < 50; q++) {
+                    console.log(data.emojis[q].order)
+                    if (document.querySelector("[cid='" + data.emojis[q].id + "']")) {
+                        document.querySelector("[cid='" + data.emojis[q].id + "']").setAttribute("count", data.emojis[q].order)
+                    }
+                }
+                $('.counters').isotope('updateSortData').isotope();
+            }
+            first = false;
+            setTimeout(function () {
+                for (var q = 0; q < 50; q++) {
+                    document.getElementById("card_" + (q + 1)).setAttribute("cid", data.emojis[q].id)
+                    document.getElementById("card_" + (q + 1)).setAttribute("count", data.emojis[q].order)
+                    document.getElementById("name_" + (q + 1)).innerHTML = data.emojis[q].emoji;
+                    new CountUp("count_" + (q + 1), counts[q], data.emojis[q].value, 0, 1, options).start();
+                    counts[q] = data.emojis[q].value;
+                }
+            }, 500);
+        });
+    }
+    update();
+    setInterval(update, 1000);
+</script>
+
+</html>

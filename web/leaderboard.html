@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Top Users</title>
+    <script src="/jquery.js"></script>
+    <script src="/countUp.js"></script>
+    <script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:900" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background: rgb(0, 0, 0);
+            margin: 0;
+        }
+
+        .card {
+            height: 6vw;
+            width: 30vw;
+            text-align: left;
+            background-color: transparent;
+        }
+
+        .image {
+            height: 5.5vw;
+            width: 5.5vw;
+            float: left;
+            margin-top: 0px;
+            margin-right: 8px;
+            border-color: #FFFFFF;
+            border-radius: 10%;
+            border: solid 0.3vw #FFF;
+        }
+
+        .name {
+            margin-top: 0vw;
+            font-family: 'Roboto';
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-size: 2vw;
+            color: #FFFFFF;
+        }
+
+        .count {
+            font-size: 3vw;
+            margin-top: -0.3vw;
+            color: #FFFFFF;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="counters"></div>
+</body>
+<script>
+    const options = {
+        useEasing: false,
+        useGrouping: true,
+        separator: ',',
+        decimal: '.',
+        prefix: '',
+        suffix: ''
+    };
+    let counts = Array.apply(null, Array(10)).map(Number.prototype.valueOf, 0);
+    let first = true;
+    for (var t = 1; t <= 10; t++) {
+        var htmlcard = `<div class="card" id="card_${t}">
+            <img src="/default.png" alt="" class="image" id="image_${t}">
+            <div class="name" id="name_${t}">Loading</div>
+            <div class="count" id="count_${t}">0</div>
+            </div>`;
+        $('.counters').append(htmlcard);
+    }
+
+    $('.counters').isotope({
+        itemSelector: '.card',
+        layoutMode: 'vertical',
+        getSortData: {
+            count: '[count] parseInt'
+        },
+        sortBy: 'count',
+        sortAscending: false
+    });
+
+    function update() {
+        $.getJSON("/data", (data) => {
+            data.users = data.users.sort(function (a, b) { return b.value - a.value });
+            if (first == false) {
+                for (var q = 0; q < 10; q++) {
+                    if (document.querySelector("[cid=" + data.users[q].id + "]")) {
+                        document.querySelector("[cid=" + data.users[q].id + "]").setAttribute("count", data.users[q].value)
+                    }
+                }
+                $('.counters').isotope('updateSortData').isotope();
+            }
+            first = false;
+            setTimeout(() => {
+                for (var q = 0; q < 10; q++) {
+                    document.getElementById("card_" + (q + 1)).setAttribute("cid", data.users[q].id)
+                    document.getElementById("card_" + (q + 1)).setAttribute("count", data.users[q].value)
+                    document.getElementById("image_" + (q + 1)).src = data.users[q].image
+                    document.getElementById("name_" + (q + 1)).innerHTML = data.users[q].name
+                    new CountUp("count_" + (q + 1) + "", counts[q], data.users[q].value, 0, 1, options).start();
+                    counts[q] = data.users[q].value
+                }
+            }, 500);
+        });
+    }
+
+    update();
+    setInterval(update, 1000);
+</script>
+
+</html>
