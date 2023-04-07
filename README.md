@@ -5,6 +5,7 @@ A Fun YT Chat Game!
   <img src="./images/thumbnail.jpg"/>
 </p>
 <br/>
+Please do not use the thumbnail
 
 If you use this give me credit in the description!
 
@@ -24,23 +25,13 @@ If you are clueless about what you are doing, don't waste your time trying.
 Spam emojis in the yt chat and level up!
 <br>
 ## Setup: 
-Fill in the blanks in the config.txt file.
-
+Make sure you have node.js version 18.15.0 or later
 <br>
-apikey=your api key
+Open the id.txt file and place the video id in there.
 <br>
-videoID=your video id
-<br>
-fetchTimer=how often you fetch the chat (in seconds)
-<br>
-<br>
-
-
-After that, run the start.bat and it should work.
-
+run the setup.bat file and it will run on localhost:3000
 <br>
 
 ## Need help? 
 <br>
 Email Me: straightfrommgyt@gmail.com
-
