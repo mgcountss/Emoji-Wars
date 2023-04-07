@@ -29,7 +29,7 @@ Make sure you have node.js version 18.15.0 or later
 <br>
 Open the id.txt file and place the video id in there.
 <br>
-run the start.bat file and it will run on localhost:3000
+Run the start.bat file and it will run on localhost:3000
 <br>
 
 ## Need help? 
