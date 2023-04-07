@@ -1,195 +1,140 @@
-const express = require("express");
+import { Masterchat, stringify } from "masterchat";
+import express from 'express';
+import fs from 'fs';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 const app = express();
-let fs = require("fs");
-let global = require('./data/data.json');
-let global2 = require('./data/active.json');
-var archive = require('./data/archive.json');
-var todo = require('./data/todo.json');
-let fetch = require("node-fetch")
-const open = require('open');
-let lasttime = 0;
-let chatID = ""
-app.use(express.static(__dirname + '/public'));
-let names = []
-let config = fs.readFileSync('./config.txt', 'utf8');
-config = config.split("\n")
-let apikey = config[0].split("=")[1].split('/r')[0]
-let videoID = config[1].split("=")[1].split('/r')[0]
-let fetchTimer = config[2].split("=")[1].split('/r')[0]
+let data = JSON.parse(fs.readFileSync('./data.json', 'utf8'));
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
-app.get('/', function (req, res) {
-  res.sendFile('/html/index.html', { root: __dirname });
-});
-app.get('/Old-YT.png', function (req, res) {
-  res.sendFile('/images/Old-YT.png', { root: __dirname });
-});
-app.get('/odometer.css', function (req, res) {
-  res.sendFile('/css/odometer.css', { root: __dirname });
-});
-app.get('/odometer.js', function (req, res) {
-  res.sendFile('/js/odometer.js', { root: __dirname });
-});
-app.get('/countup.js', function (req, res) {
-  res.sendFile('/js/countup.js', { root: __dirname });
-});
-app.get('/jquery.js', function (req, res) {
-  res.sendFile('/js/jquery.js', { root: __dirname });
-});
-app.get('/leaderboard', function (req, res) {
-  res.sendFile('/html/leaderboard.html', { root: __dirname });
-});
+app.get('/', (req, res) => {
+  res.sendFile(__dirname + '/web/index.html');
+})
+
+app.get('/leaderboard', (req, res) => {
+  res.sendFile(__dirname + '/web/leaderboard.html');
+})
+
+app.get('/countup.js', (req, res) => {
+  res.sendFile(__dirname + '/web/countup.js');
+})
+
+app.get('/default.png', (req, res) => {
+  res.sendFile(__dirname + '/web/default.png');
+})
+
+app.get('/jquery.js', (req, res) => {
+  res.sendFile(__dirname + '/web/jquery.js');
+})
+
+app.get('/leaderboard.html', (req, res) => {
+  res.sendFile(__dirname + '/web/leaderboard.html');
+})
 
 app.get('/reset', (req, res) => {
-  for (var ww = 0; ww < global.length; ww++) {
-    global[ww].value = 0
+  for (var ww = 0; ww < data.emojis.length; ww++) {
+    data.emojis[ww].value = 0
   }
+  data.users = []
   res.send("reset");
-  fs.writeFileSync('./data/data.json', JSON.stringify(global, null, "\t"));
+  fs.writeFileSync('./data.json', JSON.stringify(data, null, "\t"));
 })
 
 app.get('/data', (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
-  res.send(global);
+  res.send(data);
 })
 
-app.get('/all', (req, res) => {
-  let all = 0
-  for (let ww = 0; ww < global.length; ww++) {
-    all = all += parseFloat(global[ww].value)
-  }
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.send('' + all);
-})
+const mc = await Masterchat.init(fs.readFileSync('./id.txt', 'utf8'));
 
-app.get('/stats', (req, res) => {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.send(global2);
-})
+mc.on("chat", (chat) => {
+  console.log(chat.authorName, stringify(chat.message));
+});
 
-async function getDataFromAPI() {
-  let response = await fetch('https://www.googleapis.com/youtube/v3/liveChat/messages?key=' + apikey + '&liveChatId=' + chatID + '&part=snippet,authorDetails', {
-    headers: {
-    }
-  }).then(res => res.json()).then(data => {
-    data = data.items
-    for (let q = 0; q < data.length; q++) {
-      var current = false
-      for (let e = 0; e < archive.length; e++) {
-        if (data[q].snippet.publishedAt == archive[e].snippet.publishedAt && data[q].snippet.displayMessage == archive[e].snippet.displayMessage) {
-          current = true
-        }
-      }
-      if (current == false) {
-        todo.push(data[q])
-      }
-    }
-    archive = data
-    if (todo.length > 0) {
-      update()
-    }
-    while (archive.length > 100) {
-      archive.shift()
-    }
+mc.on("actions", (actions) => {
+  const chats = actions.filter((action) => action.type === "addChatItemAction");
+  chats.forEach(chat => {
+    check(chat)
   })
-}
+});
 
-function update() {
-  let input = todo[0].snippet.displayMessage
-  const emojiRegex = /\p{Emoji}/u;
-  let string = [];
-  let total = 0;
-  if (emojiRegex.test(input) == true) {
-    string = getFrequency(input)
+mc.on("error", (err) => {
+  let errors = {
+    "disabled": "Live chat is disabled",
+    "membersOnly": "No permission (members-only)",
+    "private": "No permission (private video)",
+    "unavailable": "Deleted OR wrong video id",
+    "unarchived": "Live stream recording is not available",
+    "denied": "Access denied (429)",
+    "invalid": "Invalid request"
   }
-  for (var r = 0; r < global.length; r++) {
-    for (var rr = 0; rr < string.length; rr++) {
-      if (string[rr][0] == global[r].emoji) {
-        if (todo[0].createdAt != lasttime) {
-          global[r].value += parseFloat(string[rr][1])
-          total += parseFloat(string[rr][1])
-        }
+  console.log(errors[err]);
+});
+
+mc.on("end", () => {
+  console.log("Live stream has ended");
+});
+
+function check(chat) {
+  let emojis = []
+  let emojiList = []
+  chat.rawMessage.forEach(element => {
+    if (element.emoji) {
+      if (emojis.includes(element.emoji.emojiId)) {
+        emojiList[emojis.indexOf(element.emoji.emojiId)].value++
+      } else {
+        emojis.push(element.emoji.emojiId)
+        emojiList.push({
+          emoji: element.emoji.emojiId,
+          value: 1
+        })
+      }
+    }
+  });
+  let add = 0;
+  for (var i = 0; i < emojiList.length; i++) {
+    for (var ii = 0; ii < data.emojis.length; ii++) {
+      if (emojiList[i].emoji == data.emojis[ii].emoji) {
+        data.emojis[ii].value += emojiList[i].value
+        add += emojiList[i].value
       }
     }
   }
-
-  for (var ww = 0; ww < global2.length; ww++) {
-    names[ww] = global2[ww].userid
-  }
-  if (names.includes(todo[0].authorDetails.channelId)) {
-    for (var p = 0; p < global2.length; p++) {
-      if (todo[0].authorDetails.channelId == global2[p].userid) {
-        global2[p].messages += parseFloat(total)
+  let found = false
+  for (var i = 0; i < data.users.length; i++) {
+    if (data.users[i].id == chat.authorChannelId) {
+      found = true
+      data.users[i] = {
+        id: chat.authorChannelId,
+        name: chat.authorName.replace(/</g, "&lt;").replace(/>/g, "&gt;"),
+        image: chat.authorPhoto,
+        value: data.users[i].value + add,
+        verified: chat.isVerified,
+        moderator: chat.isModerator,
+        owner: chat.isOwner,
+        membership: chat.membership,
       }
     }
-  } else {
-    global2.push({
-      "userid": todo[0].authorDetails.channelId,
-      "name": todo[0].authorDetails.displayName,
-      "image": todo[0].authorDetails.profileImageUrl,
-      "messages": total
+  }
+  if (!found) {
+    data.users.push({
+      id: chat.authorChannelId,
+      name: chat.authorName.replace(/</g, "&lt;").replace(/>/g, "&gt;"),
+      image: chat.authorPhoto,
+      value: add,
+      verified: chat.isVerified,
+      moderator: chat.isModerator,
+      owner: chat.isOwner,
+      membership: chat.membership,
     })
   }
-
-  todo.splice(0, 1);
-  if (todo.length > 0) {
-    update()
-  }
-
+  fs.writeFileSync('./data.json', JSON.stringify(data));
 }
 
+mc.listen();
 
-function load() {
-  fetch('https://www.googleapis.com/youtube/v3/videos?part=liveStreamingDetails&id=' + videoID + '&key=' + apikey + '')
-    .then(response => response.json())
-    .then(data => {
-      if (!data.error) {
-        if (!data.items[0].liveStreamingDetails) {
-          console.log("Error: Stream not live!")
-          process.exit()
-        } else {
-          chatID = data.items[0].liveStreamingDetails.activeLiveChatId
-          getDataFromAPI()
-          setInterval(getDataFromAPI, (fetchTimer * 1000))
-          console.log("Emoji Wars has started up!")
-        }
-      } else {
-        console.log("Error: Stream not found!")
-        process.exit()
-      }
-    });
-}
-if (apikey.length == 40 && videoID.length == 12) {
-  load()
-} else {
-  console.log("Make sure the API Key and Video ID are NOT blank!")
-  process.exit()
-}
-
-function getFrequency(string) {
-  let freq = {};
-  let freq2 = 0;
-  let result = []
-  for (character of string) {
-    if (character.length !== 1) {
-      if (freq[character]) {
-        freq[character]++;
-        freq2++
-      } else {
-        freq[character] = 1;
-        freq2 = 1;
-      }
-    }
-  }
-  for (var i in freq) {
-    result.push([i, freq[i]]);
-  }
-  return result
-}
-
-setInterval(function () {
-  fs.writeFileSync('./data/data.json', JSON.stringify(global));
-  fs.writeFileSync('./data/active.json', JSON.stringify(global2));
-  fs.writeFileSync('./data/archive.json', JSON.stringify(archive, null, "\t"));
-  fs.writeFileSync('./data/todo.json', JSON.stringify(todo, null, "\t"));
-}, 30000)
-app.listen(80)
+app.listen(3000, () => {
+  console.log('http://localhost:3000')
+  console.log('http://localhost:3000/leaderboard')
+})
