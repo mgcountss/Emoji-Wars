@@ -33,5 +33,4 @@ run the setup.bat file and it will run on localhost:3000
 <br>
 
 ## Need help? 
-<br>
 Email Me: straightfrommgyt@gmail.com
