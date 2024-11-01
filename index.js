@@ -9,13 +9,12 @@ let data = JSON.parse(fs.readFileSync('./data.json', 'utf8'));
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-
 app.get('/reset', (req, res) => {
   data.emojis = {};
   data.users = {};
   res.send({ status: "success" });
   fs.writeFileSync('./data.json', JSON.stringify(data, null, "\t"));
-})
+});
 
 app.get('/data', (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -68,7 +67,7 @@ function check(chat) {
           value: 1,
           emoji: element.emoji.emojiId
         };
-      }
+      };
     };
   });
 
@@ -82,7 +81,7 @@ function check(chat) {
       moderator: chat.isModerator,
       owner: chat.isOwner,
       membership: chat.membership,
-    }
+    };
   } else {
     data.users[chat.authorChannelId] = {
       id: chat.authorChannelId,
@@ -93,10 +92,10 @@ function check(chat) {
       moderator: chat.isModerator,
       owner: chat.isOwner,
       membership: chat.membership,
-    }
-  }
+    };
+  };
   fs.writeFileSync('./data.json', JSON.stringify(data));
-}
+};
 
 mc.listen();
 
