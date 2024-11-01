@@ -101,6 +101,6 @@ function check(chat) {
 mc.listen();
 
 app.listen(3000, () => {
-  //open('http://localhost:3000')
-  //open('http://localhost:3000/leaderboard')
+  open('http://localhost:3000')
+  open('http://localhost:3000/leaderboard')
 });
