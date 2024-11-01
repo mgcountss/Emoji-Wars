@@ -37,6 +37,8 @@
             font-size: 2vw;
             float: left;
             margin-top: -0.3vw;
+            color: #FFF;
+            padding-right: 10px;
         }
 
         .odometer {
@@ -67,7 +69,7 @@
             <div class="odometer" id="count_${t}"></div>
             </div>`;
         $('.counters').append(htmlcard);
-    }
+    };
 
     $('.counters').isotope({
         itemSelector: '.card',
@@ -81,37 +83,40 @@
 
     function update() {
         $.getJSON("/data", (data) => {
+            data.emojis = Object.values(data.emojis);
             data.emojis = data.emojis.sort(function (a, b) { return b.value - a.value });
             data.emojis = data.emojis.slice(0, 50);
             let newArray = [];
             let m = 0;
             for (var i = 0; i < 5; i++) {
                 for (var j = 0; j < 10; j++) {
+                    if (data.emojis[m] == undefined) {
+                        break;
+                    };
                     data.emojis[m].order = i + j * 5;
-                    m++
-                }
-            }
+                    m++;
+                };
+            };
             if (first == false) {
                 for (var q = 0; q < 50; q++) {
-                    console.log(data.emojis[q].order)
                     if (document.querySelector("[cid='" + data.emojis[q].id + "']")) {
-                        document.querySelector("[cid='" + data.emojis[q].id + "']").setAttribute("count", data.emojis[q].order)
-                    }
-                }
+                        document.querySelector("[cid='" + data.emojis[q].id + "']").setAttribute("count", data.emojis[q].order);
+                    };
+                };
                 $('.counters').isotope('updateSortData').isotope();
-            }
+            };
             first = false;
             setTimeout(function () {
                 for (var q = 0; q < 50; q++) {
-                    document.getElementById("card_" + (q + 1)).setAttribute("cid", data.emojis[q].id)
-                    document.getElementById("card_" + (q + 1)).setAttribute("count", data.emojis[q].order)
+                    document.getElementById("card_" + (q + 1)).setAttribute("cid", data.emojis[q].id);
+                    document.getElementById("card_" + (q + 1)).setAttribute("count", data.emojis[q].order);
                     document.getElementById("name_" + (q + 1)).innerHTML = data.emojis[q].emoji;
                     new CountUp("count_" + (q + 1), counts[q], data.emojis[q].value, 0, 1, options).start();
                     counts[q] = data.emojis[q].value;
-                }
+                };
             }, 500);
         });
-    }
+    };
     update();
     setInterval(update, 1000);
 </script>

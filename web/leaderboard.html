@@ -77,7 +77,7 @@
             <div class="count" id="count_${t}">0</div>
             </div>`;
         $('.counters').append(htmlcard);
-    }
+    };
 
     $('.counters').isotope({
         itemSelector: '.card',
@@ -91,28 +91,40 @@
 
     function update() {
         $.getJSON("/data", (data) => {
+            data.users = Object.keys(data.users).map(function (key) { return data.users[key]; });
             data.users = data.users.sort(function (a, b) { return b.value - a.value });
+            let index = 0;
+            while (data.users.length < 10) {
+                data.users.push({ id: "a_"+index, name: "Loading", value: 0, image: "/default.png" });
+                index++;
+            };
             if (first == false) {
                 for (var q = 0; q < 10; q++) {
+                    if (!data.users[q]) {
+                        continue;
+                    };
                     if (document.querySelector("[cid=" + data.users[q].id + "]")) {
-                        document.querySelector("[cid=" + data.users[q].id + "]").setAttribute("count", data.users[q].value)
-                    }
-                }
+                        document.querySelector("[cid=" + data.users[q].id + "]").setAttribute("count", data.users[q].value);
+                    };
+                };
                 $('.counters').isotope('updateSortData').isotope();
-            }
+            };
             first = false;
             setTimeout(() => {
                 for (var q = 0; q < 10; q++) {
-                    document.getElementById("card_" + (q + 1)).setAttribute("cid", data.users[q].id)
-                    document.getElementById("card_" + (q + 1)).setAttribute("count", data.users[q].value)
-                    document.getElementById("image_" + (q + 1)).src = data.users[q].image
-                    document.getElementById("name_" + (q + 1)).innerHTML = data.users[q].name
+                    if (!data.users[q]) {
+                        continue;
+                    }
+                    document.getElementById("card_" + (q + 1)).setAttribute("cid", data.users[q].id);
+                    document.getElementById("card_" + (q + 1)).setAttribute("count", data.users[q].value);
+                    document.getElementById("image_" + (q + 1)).src = data.users[q].image;
+                    document.getElementById("name_" + (q + 1)).innerHTML = data.users[q].name;
                     new CountUp("count_" + (q + 1) + "", counts[q], data.users[q].value, 0, 1, options).start();
-                    counts[q] = data.users[q].value
-                }
+                    counts[q] = data.users[q].value;
+                };
             }, 500);
         });
-    }
+    };
 
     update();
     setInterval(update, 1000);

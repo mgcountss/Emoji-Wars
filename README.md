@@ -23,11 +23,14 @@ If you are clueless about what you are doing, don't waste your time trying.
 Spam emojis in the yt chat and level up!
 
 ## Setup: 
-Make sure you have node.js version 18.15.0 or later
-
-Open the id.txt file and place the video id in there.
-
-Run the start.bat file and it will run on localhost:3000
+1. Download <a href="https://nodejs.org/en/download/">Node.js</a> version 18.15.0 (or later) and install it.
+2. Download the <a href="https://github.com/mgcountss/Emoji-Wars/releases/tag/4.0">latest release</a> of Emoji Wars from the releases tab.
+3. Extract the zip file and open it in command prompt.
+4. Run `npm install` to install the required packages.
+5. Open the `id.json` file and replace `{video_id}` with the video id of the stream.
+6. Run `node .` to start the bot.
+7. Enjoy!
 
 ## Need help? 
 Email Me: **straightfrommgyt@gmail.com**
+OR Join the Discord server: **https://discord.gg/UsEfksU**
